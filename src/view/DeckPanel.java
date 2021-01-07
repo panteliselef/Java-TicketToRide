@@ -9,16 +9,17 @@ import java.awt.*;
 import java.util.stream.IntStream;
 
 public class DeckPanel extends JLayeredPane {
-    private CardButton trainDeckCardButton;
-    private CardButton destinationDeckCardButton;
+    private final CardButton trainDeckCardButton;
+    private final CardButton destinationDeckCardButton;
     private CardButton[] cardButtonsOnTable;
     private CardLabel[] bonusCardLabels;
-    private JLabel trainDeckLabel;
-    private JLabel destinationDeckLabel;
+    private final JLabel trainDeckLabel;
+    private final JLabel destinationDeckLabel;
 
-    private int stx = 50,sty = 10,offset = 60;
-    private String trainDeckText = "Train Deck: ";
-    private String destinationDeckText = "Dest Deck: ";
+    private int stx = 50;
+    private final int sty = 10,offset = 60;
+    private final String trainDeckText = "Train Deck: ";
+    private final String destinationDeckText = "Dest Deck: ";
 
 
     /**

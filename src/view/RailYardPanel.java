@@ -17,8 +17,8 @@ public class RailYardPanel extends JLayeredPane {
     private ArrayList<ColorTextLabel> colors;
     private JButton button = new JButton();
 
-    private int stx = 10;
-    private int sty = 5;
+    private final int stx = 10;
+    private final int sty = 5;
 
     RailYardPanel(String nameTag){
         int offsetX = 60;

@@ -40,9 +40,7 @@ public class Player {
         }
         else {
             this.name = name;
-            Arrays.stream(BigCities.values()).forEach(bigCities -> {
-                this.bigCitiesTimesVisited.put(bigCities,0);
-            });
+            Arrays.stream(BigCities.values()).forEach(bigCities -> this.bigCitiesTimesVisited.put(bigCities,0));
         }
     }
 

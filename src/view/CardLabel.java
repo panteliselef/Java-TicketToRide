@@ -42,12 +42,12 @@ public class CardLabel extends JLabel {
         File imageFile = new File(card.getImageFileName());
         try{
             BufferedImage image = ImageIO.read(imageFile);
-            Image newimg;
-            newimg = image.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH);
-            ImageIcon imageIcon = new ImageIcon(newimg);
+            Image newImg;
+            newImg = image.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH);
+            ImageIcon imageIcon = new ImageIcon(newImg);
             this.setIcon(imageIcon);
         }catch (IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -73,7 +73,7 @@ public class CardLabel extends JLabel {
             ImageIcon imageIcon = new ImageIcon(newimg);
             this.setIcon(imageIcon);
         }catch (IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -104,7 +104,7 @@ public class CardLabel extends JLabel {
         BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = rotated.createGraphics();
         AffineTransform at = new AffineTransform();
-        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
+        at.translate((newWidth - w) / (float) 2, (newHeight - h) / (float) 2);
 
         int x =  w / 2;
         int y = h / 2 ;
@@ -154,7 +154,7 @@ public class CardLabel extends JLabel {
             }
             setIcon(image);
         }catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -176,9 +176,9 @@ public class CardLabel extends JLabel {
      * @post the icon of the cardLabel has become colorful
      */
     public void makeItColored(){
-        File imagefile = new File(card.getImageFileName());
+        File imageFile = new File(card.getImageFileName());
         try{
-            BufferedImage image = ImageIO.read(imagefile);
+            BufferedImage image = ImageIO.read(imageFile);
             setIcon(image);
         }catch (IOException e){
             System.out.println(e);

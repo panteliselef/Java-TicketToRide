@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 
 public class Controller {
 
-    private View view;
-    private Deck deck;
+    private final View view;
+    private final Deck deck;
     private Player[] players = new Player[2];
 
-    private int maxScore = 100;
+    private final int maxScore = 100;
     private CardColor mainColor = CardColor.LOCOMOTIVE;
     private boolean phase1Completed = false;
     private boolean phase2Completed = false;
@@ -36,7 +36,7 @@ public class Controller {
 
     /**
      * <h2>Constructor</h2>
-     * @post Creates the interface between the view package and the model package. Basically implemtents the functionality
+     * @post Creates the interface between the view package and the model package. Basically implements the functionality
      */
     private Controller(){
         deck = new Deck();
@@ -83,15 +83,13 @@ public class Controller {
     private void moveCardsToRailYard(Player pl, PlayerPanel playerPanel){
         ArrayList<TrainCard> tmpTrainCards = new ArrayList<>();
         HashMap<CardColor,ArrayList<TrainCard>> tmpHashMap = new HashMap<>();
-        Arrays.stream(CardColor.values()).forEach( cardColor -> {
-            tmpHashMap.put(cardColor,new ArrayList<>());
-        });
+        Arrays.stream(CardColor.values()).forEach( cardColor -> tmpHashMap.put(cardColor,new ArrayList<>()));
         boolean isValid = false;
         boolean firstResult = false;
         int locomotiveCards = 0;
         if(pl.hasTurn()) {
             ArrayList<CardButton> tmp = playerPanel.getTrainCardPanel().getTrainCardButtonsOnHands();
-            tmp = tmp.stream().filter(cardButton -> cardButton.isSelected()).collect(Collectors.toCollection(ArrayList::new));
+            tmp = tmp.stream().filter(AbstractButton::isSelected).collect(Collectors.toCollection(ArrayList::new));
             tmp.forEach(cardButton -> {
                 TrainCard tmpCard = (TrainCard)cardButton.getCard();
                 tmpTrainCards.add(tmpCard);
@@ -164,9 +162,7 @@ public class Controller {
 
             if(isValid){
                 if(isTrainRobbing){
-                    trainRobbingColors.forEach(color -> {
-                        getOpponent(pl).getRailYard().getCardsByColor(color).clear();
-                    });
+                    trainRobbingColors.forEach(color -> getOpponent(pl).getRailYard().getCardsByColor(color).clear());
                     getOpponentPanel(pl).getRailYardPanel().setTrainCardButtonsOnRailYard(getOpponent(pl).getRailYard().getCards());
                 }
 
@@ -305,7 +301,7 @@ public class Controller {
 
     /**
      * <b>Accessor Method</b>
-     * @param tc a traincard
+     * @param tc a train card
      * @param pl a player
      * @param selCardsByPlayer a list of trainCards
      * @post whether or not a card can be player has bee returned
@@ -339,8 +335,7 @@ public class Controller {
      * @return true if the phase1 can happen
      */
     private boolean canPhaseOneHappen(){
-        if(phase1Completed) return false;
-        return true;
+        return !phase1Completed;
     }
 
     /**
@@ -362,7 +357,7 @@ public class Controller {
      * @param pl a player
      * @param cd the destination card the player wants to buy off
      * @param plp the panel of player
-     * @post the player buys off the cards, get's its points and get's one step close to acquire a bouns cards
+     * @post the player buys off the cards, gets its points and gets one step close to acquire a bonus cards
      * @pre phase2 is allowed to happen,phase2 is not happening,it's the player's turn.
      */
     private void buyOffCard(Player pl,PlayerPanel plp,DestinationCard cd){
@@ -383,9 +378,7 @@ public class Controller {
                     popupDialog.add(yesButton);
                     popupDialog.add(noButton);
 
-                    noButton.addActionListener(e->{
-                        popupDialog.dispose();
-                    });
+                    noButton.addActionListener(e-> popupDialog.dispose());
                     yesButton.addActionListener(e->{
                         String arCity = cd.getArrivalCity();
                         String depCity = cd.getDepartureCity();
@@ -484,7 +477,7 @@ public class Controller {
      * @return the card that matches the given name
      */
     private BigCitiesCard getBigCityC(String s){
-        return Arrays.stream(deck.getBigCitiesOnTable()).filter(bigCitiesCard -> bigCitiesCard.getCity().equals(toEnum(s))).findFirst().get();
+        return Arrays.stream(deck.getBigCitiesOnTable()).filter(bigCitiesCard -> bigCitiesCard.getCity().equals(toEnum(s))).findFirst().orElse(null);
     }
     /**
      * <b>Observer Method</b>
@@ -502,7 +495,7 @@ public class Controller {
      * @return the enum that matches the given name
      */
     private BigCities toEnum(String str) throws EnumConstantNotPresentException{
-        return Arrays.stream(BigCities.values()).filter(bigCities -> bigCities.toString().toLowerCase().equals(str.toLowerCase().replace(" ",""))).findFirst().get();
+        return Arrays.stream(BigCities.values()).filter(bigCities -> bigCities.toString().toLowerCase().equals(str.toLowerCase().replace(" ",""))).findFirst().orElse(null);
     }
 
     /**
@@ -513,16 +506,14 @@ public class Controller {
      */
     private void setListenerToDestCardsOnHands(Player player,PlayerPanel pl){
         ArrayList<CardButton> tmp = pl.getDestinationTicketPanel().getDestinationCardButtonsOnHands();
-        tmp.forEach(cardButton -> {
-            cardButton.addActionListener(e->{
-                if(cardButton.isSelected()){
-                    cardButton.setBounds(cardButton.getX(),cardButton.getY()-10);
-                }else {
-                    cardButton.setBounds(cardButton.getX(),cardButton.getY()+10);
-                }
-                buyOffCard(player,pl,(DestinationCard) cardButton.getCard());
-            });
-        });
+        tmp.forEach(cardButton -> cardButton.addActionListener(e->{
+            if(cardButton.isSelected()){
+                cardButton.setBounds(cardButton.getX(),cardButton.getY()-10);
+            }else {
+                cardButton.setBounds(cardButton.getX(),cardButton.getY()+10);
+            }
+            buyOffCard(player,pl,(DestinationCard) cardButton.getCard());
+        }));
     }
 
 
@@ -533,14 +524,12 @@ public class Controller {
     private ArrayList<String> getSavedGames(){
         File folder= new File("./SavedGames");
         if(folder.exists()){
-            ArrayList<File> files = new ArrayList<File>(Arrays.asList(folder.listFiles()));
+            ArrayList<File> files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(folder.listFiles())));
             ArrayList<String> fileNames = new ArrayList<>();
-            files.forEach(file -> {
-                fileNames.add(file.getName().replaceFirst("[.][^.]+$", ""));
-            });
+            files.forEach(file -> fileNames.add(file.getName().replaceFirst("[.][^.]+$", "")));
             return fileNames;
         }
-        else return new ArrayList<String>();
+        else return new ArrayList<>();
     }
     /**
      * <b>Transformer Method</b>
@@ -716,26 +705,16 @@ public class Controller {
         });
 
 
-        view.getPlayerPanel1().getPlayerInfoPanel().getBonusCardsButton().addActionListener(e->{
-            showBigCitiesCardAcquired(players[0]);
-        });
-        view.getPlayerPanel2().getPlayerInfoPanel().getBonusCardsButton().addActionListener(e->{
-            showBigCitiesCardAcquired(players[1]);
-        });
-
-        view.getPlayerPanel1().getPlayerInfoPanel().getDestTicketsButton().addActionListener(e->{
-            showDestTicketsAcquired(players[0]);
-        });
-
-        view.getPlayerPanel2().getPlayerInfoPanel().getDestTicketsButton().addActionListener(e->{
-            showDestTicketsAcquired(players[1]);
-        });
+        view.getPlayerPanel1().getPlayerInfoPanel().getBonusCardsButton().addActionListener(e-> showBigCitiesCardAcquired(players[0]));
+        view.getPlayerPanel2().getPlayerInfoPanel().getBonusCardsButton().addActionListener(e-> showBigCitiesCardAcquired(players[1]));
+        view.getPlayerPanel1().getPlayerInfoPanel().getDestTicketsButton().addActionListener(e-> showDestTicketsAcquired(players[0]));
+        view.getPlayerPanel2().getPlayerInfoPanel().getDestTicketsButton().addActionListener(e-> showDestTicketsAcquired(players[1]));
 
     }
 
 
     /**
-     * <b>Transfomer Method</b>
+     * <b>Transformer Method</b>
      * @post all selected destination cards have been moved to player's hands
      * @param max_cards number of max card a user can take
      * @param pl player
@@ -783,7 +762,7 @@ public class Controller {
 
         JButton submit = new JButton("Submit");
         submit.addActionListener(event->{
-            if (allowNotCardsTaken || (!allowNotCardsTaken && checkBoxes.stream().filter(jCheckBox -> jCheckBox.isSelected()).count()>=1)){
+            if (allowNotCardsTaken || checkBoxes.stream().filter(AbstractButton::isSelected).count() >= 1){
                 for (int i = 0; i < checkBoxes.size() ; i++) {
                     if(checkBoxes.get(i).isSelected()){
                         pl.addDestinationCard(tmp.get(i));
@@ -912,8 +891,8 @@ public class Controller {
 
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(new File("./resources/files/destinationCards.csv")));
-            String sCurrentLine = "";
+            BufferedReader br = new BufferedReader(new FileReader("./resources/files/destinationCards.csv"));
+            String sCurrentLine;
             int i = -1;
             while ((sCurrentLine = br.readLine()) != null) {
                 if (i == -1) {
@@ -927,8 +906,7 @@ public class Controller {
                 int score = Integer.parseInt(splitLine[3]);
                 String colorsList = splitLine[4];
                 String[] splitColors = colorsList.split("-");
-                ArrayList<String> colors = new ArrayList<String>();
-                colors.addAll(Arrays.asList(splitColors));
+                ArrayList<String> colors = new ArrayList<>(Arrays.asList(splitColors));
                 String imagePath = splitLine[5];
                 imagePath = "./resources/images/destination_Tickets/" + imagePath;
 
@@ -936,7 +914,7 @@ public class Controller {
             }
         }
         catch ( IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -1076,10 +1054,7 @@ public class Controller {
     private boolean isGameFinished(Player pl){
 
         if(pl.getScore()>=maxScore) return true;
-        if(deck.getTrainCardsDeck().size()==0) {
-            return true;
-        }
-        return false;
+        return deck.getTrainCardsDeck().size() == 0;
     }
 
     /**
@@ -1151,7 +1126,7 @@ public class Controller {
     private void loadGame(String fileName){
         File f= new File("./SavedGames/"+fileName+".json");
         JSONParser parser = new JSONParser();
-        ArrayList<Player> pl = new ArrayList<Player>();
+        ArrayList<Player> pl = new ArrayList<>();
         try {
             Object obj = parser.parse(new FileReader(f));
             JSONObject mainObj = (JSONObject) obj;
@@ -1190,9 +1165,7 @@ public class Controller {
 
                 JSONObject bigCitiesTimesVisitedJSON = (JSONObject) curPlJSON.get("bigCitiesTimesVisited");
                 HashMap<BigCities,Integer> bigCitiesTimesVisited = new HashMap<>();
-                Arrays.stream(BigCities.values()).forEach(bigCities -> {
-                    bigCitiesTimesVisited.put(bigCities,0);
-                });
+                Arrays.stream(BigCities.values()).forEach(bigCities -> bigCitiesTimesVisited.put(bigCities,0));
                 Arrays.stream(BigCities.values()).forEach(bigCities -> {
                     for (int i = 0; i < Integer.parseInt(bigCitiesTimesVisitedJSON.get(bigCities.toString()).toString()); i++) {
                         bigCitiesTimesVisited.replace(bigCities,bigCitiesTimesVisited.get(bigCities)+1);
@@ -1318,7 +1291,7 @@ public class Controller {
 
             JSONArray cardsOnTableJSON = (JSONArray) deckJSON.get("cardsOnTable");
             ArrayList<TrainCard> cardsOnTable = new ArrayList<>();
-            Iterator<String> colorIterator = cardsOnTableJSON.iterator();
+            Iterator<String> colorIterator =  cardsOnTableJSON.iterator();
             while (colorIterator.hasNext()) {
                 String color = colorIterator.next();
                 CardColor cd = Arrays.stream(CardColor.values()).filter(cardColor -> cardColor.toString().toLowerCase().equals(color.toLowerCase().replace(" ",""))).findFirst().get();
@@ -1363,17 +1336,13 @@ public class Controller {
     }
 
     private void saveGame(String fileName){
-        JSONParser parser = new JSONParser();
-
         JSONArray players = new JSONArray();
         for (Player pl:getPlayers()
              ) {
             JSONObject player = new JSONObject();
 
             JSONObject trainCardsOnHands = new JSONObject();
-            Arrays.stream(CardColor.values()).forEach(cardColor -> {
-                trainCardsOnHands.put(cardColor,pl.getCardsOnHands().stream().filter(card-> card.getColor()==cardColor).count());
-            });
+            Arrays.stream(CardColor.values()).forEach(cardColor -> trainCardsOnHands.put(cardColor,pl.getCardsOnHands().stream().filter(card-> card.getColor()==cardColor).count()));
             JSONArray destinationCardsOnHands = new JSONArray();
             pl.getDestinationCards().stream().forEach(destinationCard -> {
                 JSONObject destCard = new JSONObject();
@@ -1402,7 +1371,7 @@ public class Controller {
                 destinationCardsAc.add(destCard);
             });
             JSONArray bonusCards = new JSONArray();
-            pl.getBonusCardsAcquired().stream().forEach(bCard -> {
+            pl.getBonusCardsAcquired().forEach(bCard -> {
                 JSONObject bonusCard = new JSONObject();
 
                 bonusCard.put("cityName",bCard.getCity().toString());
@@ -1414,19 +1383,12 @@ public class Controller {
 
 
             JSONObject bigCitiesTimesVisited = new JSONObject();
-            Arrays.stream(BigCities.values()).forEach( bigCity-> {
-
-                bigCitiesTimesVisited.put(bigCity,pl.getBigCitiesTimeVisited(bigCity));
-            });
+            Arrays.stream(BigCities.values()).forEach( bigCity-> bigCitiesTimesVisited.put(bigCity,pl.getBigCitiesTimeVisited(bigCity)));
 
             JSONObject railYard = new JSONObject();
-            pl.getRailYard().getCards().forEach( (cardColor, trainCards) -> {
-                railYard.put(cardColor,trainCards.size());
-            });
+            pl.getRailYard().getCards().forEach( (cardColor, trainCards) -> railYard.put(cardColor,trainCards.size()));
             JSONObject track = new JSONObject();
-            pl.getTrack().getCards().forEach(((cardColor, integer) -> {
-                track.put(cardColor,integer);
-            }));
+            pl.getTrack().getCards().forEach(((cardColor, integer) -> track.put(cardColor,integer)));
 
             player.put("track",track);
             player.put("railYard",railYard);
@@ -1459,9 +1421,7 @@ public class Controller {
             bigCitiesOnTable.add(bonusCard);
         });
         JSONArray trainCardsDeck = new JSONArray();
-        deck.getTrainCardsDeck().forEach(trainCard -> {
-            trainCardsDeck.add(trainCard.getColor().toString());
-        });
+        deck.getTrainCardsDeck().forEach(trainCard -> trainCardsDeck.add(trainCard.getColor().toString()));
         JSONArray destinationCardsDeck = new JSONArray();
         deck.getDestinationCardsDeck().forEach(destinationCard -> {
             JSONObject destCard = new JSONObject();
@@ -1521,8 +1481,8 @@ public class Controller {
     }
 
 
-    public static void main(String args[]){
-        Controller controller = new Controller();
+    public static void main(String[] args){
+        new Controller();
     }
 }
 

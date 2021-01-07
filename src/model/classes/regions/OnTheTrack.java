@@ -10,16 +10,14 @@ import java.util.HashMap;
  * @author elefcodes
  */
 public class OnTheTrack {
-    private HashMap<CardColor, Integer> onTheTrackCollection = new HashMap<CardColor, Integer>();
+    private final HashMap<CardColor, Integer> onTheTrackCollection = new HashMap<>();
 
     /**
      * <h2>Constructor</h2>
      * @post Creates a "on-the-track" region and initializes the keys for the hashMap
      */
     public OnTheTrack(){
-        Arrays.stream(CardColor.values()).forEach(cardColor -> {
-            onTheTrackCollection.put(cardColor,0);
-        });
+        Arrays.stream(CardColor.values()).forEach(cardColor -> onTheTrackCollection.put(cardColor,0));
     }
 
     public void empty(){

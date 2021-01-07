@@ -10,9 +10,9 @@ import java.util.HashMap;
 public class OnTheTrackPanel extends JLayeredPane {
     private JLabel nameTag;
     private HashMap<CardColor,JLabel> cards ;
-    private int stx = 10;
-    private int sty = 5;
-    private int offsetX = 75;
+    private final int stx = 10;
+    private final int sty = 5;
+    private final int offsetX = 75;
 
 
     OnTheTrackPanel(String nameTag){
@@ -22,7 +22,7 @@ public class OnTheTrackPanel extends JLayeredPane {
 
     private void initComponents(){
         nameTag = new JLabel();
-        cards = new HashMap<CardColor, JLabel>();
+        cards = new HashMap<>();
 
         this.setLayout(null);
         this.add(nameTag);

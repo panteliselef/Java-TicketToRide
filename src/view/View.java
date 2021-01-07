@@ -8,7 +8,6 @@ public class View extends JFrame {
     final private DeckPanel gameDeckPanel;
     final private PlayerPanel playerPanel1;
     final private PlayerPanel playerPanel2;
-    final private ImagePane bg;
     final private JMenuBar menuBar;
     final private JMenu saveGame;
     final private JMenu loadGame;
@@ -33,7 +32,7 @@ public class View extends JFrame {
         menuBar.add(exitGame);
         this.setJMenuBar(menuBar);
 
-        bg = new ImagePane(newImg);
+        ImagePane bg = new ImagePane(newImg);
 
         this.setVisible(true);
         bg.setLayout(new BorderLayout());

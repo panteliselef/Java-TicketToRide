@@ -17,7 +17,7 @@ public class PlayerPanel extends JLayeredPane {
     private RailYardPanel railYardPanel ;
     private OnTheTrackPanel onTheTrackPanel ;
     private DestinationTicketPanel destinationTicketPanel ;
-    private InfoPanel playerInfoPanel ;
+    private final InfoPanel playerInfoPanel ;
 
 
     PlayerPanel(String playerName){

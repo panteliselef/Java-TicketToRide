@@ -2,6 +2,6 @@ package model.classes.cards;
 
 
 public enum BigCities {
-    Miami,Seattle,Dallas,Chicago,LosAngeles,NewYork;
+    Miami,Seattle,Dallas,Chicago,LosAngeles,NewYork
 }
 

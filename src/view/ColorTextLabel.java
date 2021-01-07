@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class ColorTextLabel extends JLabel {
 
-    private CardColor cardColor;
+    private final CardColor cardColor;
 
     /**
      * <h2>Constructor</h2>

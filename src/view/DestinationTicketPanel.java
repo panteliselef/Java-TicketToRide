@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class DestinationTicketPanel extends JLayeredPane {
     private JLabel nameTag;
-    private ArrayList<CardButton> destinationCardButtonsOnHands = new ArrayList<CardButton>();
-    private int stx = 10;
-    private int sty = 10;
-    private int offset = 40;
+    private ArrayList<CardButton> destinationCardButtonsOnHands = new ArrayList<>();
+    private final int stx = 10;
+    private final int sty = 10;
+    private final int offset = 40;
 
     DestinationTicketPanel(String nameTag){
         this.initComponents();
@@ -41,7 +41,7 @@ public class DestinationTicketPanel extends JLayeredPane {
 
     private void initComponents(){
         nameTag = new JLabel();
-        destinationCardButtonsOnHands = new ArrayList<CardButton>();
+        destinationCardButtonsOnHands = new ArrayList<>();
     }
     public ArrayList<CardButton> getDestinationCardButtonsOnHands(){
         return this.destinationCardButtonsOnHands;

@@ -10,9 +10,9 @@ public class TrainCardsPanel extends JLayeredPane {
     private JLabel nameTag;
     private ArrayList<CardButton> trainCardButtonsOnHands;
     private JButton button;
-    private int stx = 10;
-    private int sty = 10;
-    private int offset = 40;
+    private final int stx = 10;
+    private final int sty = 10;
+    private final int offset = 40;
 
 
     TrainCardsPanel(String nameTag){

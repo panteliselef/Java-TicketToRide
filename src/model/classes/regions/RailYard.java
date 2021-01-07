@@ -1,6 +1,5 @@
 package model.classes.regions;
 
-import model.classes.cards.Card;
 import model.classes.cards.CardColor;
 import model.classes.cards.TrainCard;
 
@@ -13,16 +12,14 @@ import java.util.HashMap;
  * @author elefcodes
  */
 public class RailYard{
-    private HashMap<CardColor, ArrayList<TrainCard>> railYardCollection = new HashMap<CardColor, ArrayList<TrainCard>>();
+    private final HashMap<CardColor, ArrayList<TrainCard>> railYardCollection = new HashMap<>();
 
     /**
      * <h2>Constructor</h2>
      * @post Creates a railYard AND puts all cardColor option to hashMap
      */
     public RailYard(){
-        Arrays.stream(CardColor.values()).forEach(cardColor -> {
-            railYardCollection.put(cardColor,new ArrayList<TrainCard>());
-        });
+        Arrays.stream(CardColor.values()).forEach(cardColor -> railYardCollection.put(cardColor, new ArrayList<>()));
     }
 
 

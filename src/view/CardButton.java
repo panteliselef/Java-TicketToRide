@@ -49,9 +49,6 @@ public class CardButton extends JButton {
         this.card = null;
         ImageIcon myImage;
         switch (t){
-            case TRAIN:
-                myImage = new ImageIcon("./resources/images/trainCards/trainBackCard.jpg");
-                break;
             case DESTINATION:
                 myImage = new ImageIcon("./resources/images/destination_Tickets/desBackCard.jpg");
                 break;
@@ -62,8 +59,8 @@ public class CardButton extends JButton {
         this.setSize(50,95);
 
         Image img = myImage.getImage();
-        Image newimg = img.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH);
-        ImageIcon image = new ImageIcon(newimg);
+        Image newImg = img.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
         this.setIcon(image);
     }
 

@@ -1,6 +1,5 @@
 package model.classes.cards;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,7 +11,7 @@ public class DestinationCard extends PointsCard {
     final private int uniqueId;
     final private String departureCity;
     final private String arrivalCity;
-    private ArrayList<CardColor> colors = new ArrayList<>();
+    private final ArrayList<CardColor> colors = new ArrayList<>();
 
     /**
      * <h2>Constructor</h2>
@@ -39,14 +38,11 @@ public class DestinationCard extends PointsCard {
      * @param c ArrayList of strings
      */
     private void setColors(ArrayList<String> c){
-        c.forEach(s -> {
-            Arrays.stream(CardColor.values()).forEach(cardColor -> {
-
-                if(s.toLowerCase().equals(cardColor.toString().toLowerCase())){
-                    this.colors.add(cardColor);
-                }
-            });
-        });
+        c.forEach(s -> Arrays.stream(CardColor.values()).forEach(cardColor -> {
+            if (s.equalsIgnoreCase(cardColor.toString())) {
+                this.colors.add(cardColor);
+            }
+        }));
     }
     /**
      * <b>Accessor Method</b>
